@@ -1,50 +1,42 @@
 const router = require("express").Router()
 const route = router
-const cheerio = require("cheerio")
-const Service = require('../helper/sevice')
-const baseUrl = require("../constant/url")
+const Services = require("../controller/services")
+
 
 route.get("/", (req, res) => {
     res.send({
         endpoint: {
-            getKomikTerbaru: "/api/v1/komik-terbaru/:page",
-            getDaftarManga: "/api/v1/manga/:page/:query?",
-            getSearch: "/api/v1/search/:query",
-            getDaftarManhua: "/api/v1/manhua/:page",
-            getDaftarManhwa: "/api/v1/manhwa/:page",
-            getKomikDetail: "/api/v1/detail/:endpoint",
-            getChapter: "/api/v1/chapter/:endpoint"
+            getOngoingAnime: "/api/v1/ongoing/:page",
+            getCompletedAnime: "/api/v1/completed/:page",
+            getAnimeSearch: "/api/v1/search/:q",
+            getAnimeList: "/api/v1/anime-list",
+            getAnimeDetail: "/api/v1/detail/:endpoint",
+            getAnimeEpisode: "/api/v1/episode/:endpoint",
+            getBatchLink: "/api/v1/batch/:endpoint",
+            getGenreList: "/api/v1/genres",
+            getGenrePage: "/api/v1/genres/:genre/:page"
         }
     })
 })
 
-// Get Komik terbaru -Done-
-route.get("/api/v1/komik-terbaru/:page", async (req, res) => {
-    const page = req.params.page
-    let url = page === "1" ? `https://komikindo.id/komik-terbaru` : `https://komikindo.id/komik-terbaru/page/${page}`
 
-    try {
-        return res.send({
-            message: response.status,
-            komikBaru
-        })
-    } catch (error) {
-        console.log(error)
-        res.send({
-            status: false,
-            message: error
-        })
-    }
-})
-
-
-route.get('*', (req, res) => {
-    res.status(404).json({
-        method: req.method,
-        message: 'cant find spesific endpoint, please make sure you read a documentation',
-        status: false,
-        code: 401,
-    });
-});
+// Get Ongoing Anime -Done-
+router.get("/api/v1/ongoing/:page", Services.getOngoing)
+// Get Completed Anime -Done-
+router.get("/api/v1/completed/:page", Services.getCompleted)
+// Get Search Anime -Done-
+router.get("/api/v1/search/:q", Services.getSearch)
+// Get Anime List -Done-
+router.get("/api/v1/anime-list", Services.getAnimeList)
+// Get Anime Detail -Done-  
+route.get("/api/v1/detail/:endpoint", Services.getAnimeDetail)
+// Get Anime Episode -Done-
+router.get("/api/v1/episode/:endpoint", Services.getAnimeEpisode)
+// Get Batch Link -Done-
+router.get("/api/v1/batch/:endpoint", Services.getBatchLink)
+// Get Genre List -Done-
+router.get("/api/v1/genres", Services.getGenreList) 
+// Get Genre Page -Done-
+router.get("/api/v1/genres/:genre/:page", Services.getGenrePage)
 
 module.exports = route
