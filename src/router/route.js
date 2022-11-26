@@ -25,45 +25,6 @@ route.get("/api/v1/komik-terbaru/:page", async (req, res) => {
 
     try {
         const response = await Service.fetchService(url, res)
-        if (response.status === 200) {
-            const $ = cheerio.load(response.data)
-            let komikBaru = []
-            let titlePage, thumb, title, lastChapter, lastChapterLink, lastUpdated, warna, endpoint
-            titlePage = $(".page-title").text()
-            $(".animepost").each((index, el) => {
-                thumb = $(el).find("img").attr("src")
-                title = $(el).find(".tt").text()
-                lastChapter = $(el).find(".lsch > a").text()
-                lastChapterLink = $(el).find(".lsch > a").attr("href").replace(`${baseUrl}/`, "").replace("/", "")
-                lastUpdated = $(el).find(".lsch > span").text()
-                warna = $(el).find(".warnalabel").text().trim() === "Warna" ? true : false
-                type = $(el).find(".limit > span").attr("class").replace("typeflag ", "")
-                endpoint = $(el).find("a").attr("href").replace(`${baseUrl}/komik/`, "").replace("/", "")
-
-                komikBaru.push({
-                    title,
-                    thumb,
-                    lastChapter,
-                    lastChapterLink,
-                    lastUpdated,
-                    warna,
-                    type,
-                    endpoint
-                })
-            })
-            return res.status(200).json({
-                status: true,
-                message: "success",
-                titlePage,
-                komikBaru
-            })
-        }
-        if (response.status === 500 || res.status(500)) {
-            res.send({
-                page,
-                url
-            })
-        }
         return res.send({
             message: response.status,
             komikBaru
