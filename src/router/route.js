@@ -172,50 +172,9 @@ route.get("/api/v1/manhua/:page", async (req, res) => {
 // Get Daftar Manhwa (korea) -Done-
 route.get("/api/v1/manhwa/:page", async (req, res) => {
     const page = req.params.page
-    let url = page === "1" ? `${baseUrl}/manhwa` : `${baseUrl}/manhwa/page/${page}`
-
-    try {
-        const response = await Service.fetchService(url, res)
-        if (response.status === 200) {
-            const $ = cheerio.load(response.data)
-            let daftar_manhwa = []
-            let titlePage, thumb, title, score, warna, endpoint
-            titlePage = $(".page-title").text()
-            $(".animepost").each((index, el) => {
-                thumb = $(el).find("img").attr("src")
-                title = $(el).find(".tt").text()
-                score = $(el).find(".rating").text().replace("\n ", "")
-                warna = $(el).find(".warnalabel").text().trim() === "Warna" ? true : false
-                type = $(el).find(".limit > span").attr("class").replace("typeflag ", "")
-                endpoint = $(el).find("a").attr("href").replace(`${baseUrl}/komik/`, "").replace("/", "")
-
-                daftar_manhwa.push({
-                    title,
-                    thumb,
-                    score,
-                    warna,
-                    type,
-                    endpoint
-                })
-            })
-            return res.status(200).json({
-                status: true,
-                message: "success",
-                titlePage,
-                daftar_manhwa
-            })
-        }
-        return res.send({
-            message: response.status,
-            daftar_manhwa
-        })
-    } catch (error) {
-        console.log(error)
-        res.send({
-            status: false,
-            message: error
-        })
-    }
+    res.send({
+        page
+    })
 })
 
 route.get('*', (req, res) => {
