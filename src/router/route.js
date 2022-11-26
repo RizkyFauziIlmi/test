@@ -58,6 +58,12 @@ route.get("/api/v1/komik-terbaru/:page", async (req, res) => {
                 komikBaru
             })
         }
+        if (response.status === 500 || res.status(500)) {
+            res.send({
+                page,
+                url
+            })
+        }
         return res.send({
             message: response.status,
             komikBaru
