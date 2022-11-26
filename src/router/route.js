@@ -24,7 +24,6 @@ route.get("/api/v1/komik-terbaru/:page", async (req, res) => {
     let url = page === "1" ? `https://komikindo.id/komik-terbaru` : `https://komikindo.id/komik-terbaru/page/${page}`
 
     try {
-        const response = await Service.fetchService(url, res)
         return res.send({
             message: response.status,
             komikBaru
